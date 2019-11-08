@@ -49,7 +49,6 @@
                 }
         });
     }
-
     
     function setSentMessageMap() {
         sentMessageMap = new SentMessageMap();

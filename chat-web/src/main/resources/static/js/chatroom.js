@@ -156,6 +156,7 @@
         
         registerReceive: function() {
             console.log("userId为 " + userId + " 的用户登记到在线用户表成功！");
+            console.log('开始心跳包机制...');
         },
         
         singleReceive: function(data) {

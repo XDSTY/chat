@@ -29,4 +29,9 @@ public interface MsgType {
      */
     String REGISTER = "REGISTER";
 
+    /**
+     * 心跳包
+     */
+    String HEART_BEAT = "HEART_BEAT";
+
 }

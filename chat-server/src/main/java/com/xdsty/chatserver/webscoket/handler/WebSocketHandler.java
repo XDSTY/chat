@@ -1,9 +1,8 @@
-package com.xdsty.chatserver.webscoket;
+package com.xdsty.chatserver.webscoket.handler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xdsty.chatserver.attribute.Attributes;
 import com.xdsty.chatserver.msg.ErrMsg;
-import com.xdsty.chatserver.msg.MsgType;
 import com.xdsty.chatserver.service.chatstrategy.AbstractChatStrategy;
 import com.xdsty.chatserver.service.chatstrategy.ChatStrategyFactory;
 import com.xdsty.chatserver.util.Constant;

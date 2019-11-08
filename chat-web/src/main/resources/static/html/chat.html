@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>小小的聊天室</title>
+<title>米奇妙妙屋</title>
 <link rel="icon" href="../img/chat.ico" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="../css/chatroom.css">
 <link rel="stylesheet" type="text/css" href="../css/common/layui.css">
@@ -135,6 +135,29 @@
     getWebsocketHostAndConnect();
     setSentMessageMap();
 
+    var heartCheck = {
+        timeout: 10000,
+        timeoutObj: null,
+        serverTimeoutObj: null,
+        reset: function(){
+            clearTimeout(this.timeoutObj);
+            clearTimeout(this.serverTimeoutObj);
+    　　　   this.start();
+        },
+        start: function(){
+            var self = this;
+            this.timeoutObj = setTimeout(function(){
+                var data = {
+                    "type" : "HEART_BEAT"
+                };
+                socket.send(JSON.stringify(data));
+                self.serverTimeoutObj = setTimeout(function(){
+                    ws.close();//如果onclose会执行reconnect 我们执行ws.close()就行了.如果直接执行reconnect 会触发onclose导致重连两次
+                }, self.timeout)
+            }, this.timeout)
+        }
+    };
+
     function getWebsocketHostAndConnect() {
         $.getJSON('/user/host', function(res) {
             if(res.code === 0){
@@ -151,6 +174,7 @@
         if(window.WebSocket){
             socket = new WebSocket("ws://" + socketHost);
             socket.onmessage = function(event){
+                heartCheck.reset();
                 var json = JSON.parse(event.data);
                 if (json.type !== 'ERR') {
                     var type = json.type;
@@ -171,25 +195,29 @@
                         case "FILE_MSG_GROUP_SENDING":
                             ws.fileMsgGroupRecieve(json.data);
                             break;
+                        case "HEART_BEAT":
+                            //心跳包 不用管
+                            break;
                         default:
-                            console.log("不正确的类型！");
+                            console.log("不正确的类型");
                     }
                 } else {
-                    alert(json.msg);
                     console.log(json.msg);
                 }
             };
 
-            // 连接成功1秒后，将用户信息注册到服务器在线用户表
+            // 连接成功1秒后 将用户信息注册到服务器在线用户表
             socket.onopen = setTimeout(function(event){
                   ws.register();
             }, 1000);
 
             socket.onclose = function(event){
-                  console.log("WebSocket已关闭...");
+                  console.log("WebSocket已关闭 准备重新连接...");
+                  //重新连接
+                  getWebsocketHostAndConnect();
             };
         } else {
-              alert("您的浏览器不支持WebSocket！");
+              alert("您的浏览器不支持WebSocket");
         }
     }
 

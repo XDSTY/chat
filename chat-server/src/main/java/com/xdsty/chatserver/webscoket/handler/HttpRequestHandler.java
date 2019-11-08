@@ -1,4 +1,4 @@
-package com.xdsty.chatserver.webscoket;
+package com.xdsty.chatserver.webscoket.handler;
 
 import com.xdsty.chatserver.attribute.Attributes;
 import io.netty.buffer.ByteBuf;

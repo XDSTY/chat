@@ -1,12 +1,14 @@
 package com.xdsty.chatserver.webscoket;
 
+import com.xdsty.chatserver.webscoket.handler.IMIdleStateHandler;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.FixedRecvByteBufAllocator;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpServerCodec;
+import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.util.concurrent.Future;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +39,10 @@ public class WebSocketServer implements Runnable {
     private EventLoopGroup workerGroup = new NioEventLoopGroup();
 
     @Autowired
-    private WebSocketChildChannelHandler webSocketChildChannelHandler;
+    private ChannelHandler webSocketHandler;
+
+    @Autowired
+    private ChannelHandler httpRequestHandler;
 
     private ChannelFuture serverChannelFuture;
 
@@ -61,7 +66,21 @@ public class WebSocketServer implements Runnable {
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
                     //配置固定长度的接受缓冲区
                     .childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(592048))
-                    .childHandler(webSocketChildChannelHandler);
+                    //检测客户端的数据 一定的时间没有收到客户端的数据 则断开连接
+                    .childHandler(new ChannelInitializer<SocketChannel>() {
+                        @Override
+                        protected void initChannel(SocketChannel ch) throws Exception {
+                            ch.pipeline().addLast(new IMIdleStateHandler());
+                            //Http编码解码器
+                            ch.pipeline().addLast("http-codec", new HttpServerCodec());
+                            //把http头部和body拼成完整的请求
+                            ch.pipeline().addLast("aggregator", new HttpObjectAggregator(65536));
+                            //方便大文件传输
+                            ch.pipeline().addLast("http-chunked", new ChunkedWriteHandler());
+                            ch.pipeline().addLast("http-handler", httpRequestHandler);
+                            ch.pipeline().addLast("websocket-handler", webSocketHandler);
+                        }
+                    });
             long end = System.currentTimeMillis();
             log.info("Netty websocket服务器启动完成，耗时 " + (end - begin) + " ms, ");
             serverChannelFuture = serverBootstrap.bind(port).sync();
@@ -83,13 +102,5 @@ public class WebSocketServer implements Runnable {
         }catch (InterruptedException e){
             e.printStackTrace();
         }
-    }
-
-    public ChannelFuture getServerChannelFuture() {
-        return serverChannelFuture;
-    }
-
-    public void setServerChannelFuture(ChannelFuture serverChannelFuture) {
-        this.serverChannelFuture = serverChannelFuture;
     }
 }

@@ -1,0 +1,6 @@
+server:
+    port: 8081
+
+zk:
+    server: 119.23.240.184:2181
+    root: /mkroot

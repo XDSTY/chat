@@ -43,7 +43,13 @@ public class UserInfoController {
     @GetMapping("host")
     public Result<String> getRoutingPath(HttpSession session){
         UserInfo userInfo = (UserInfo) session.getAttribute(Constant.USER);
-        String host = ConsistentHash.getServer(userInfo.getUserId());
+        String host = null;
+        try {
+            host = ConsistentHash.getServer(userInfo.getUserId());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            return Result.createByFailure();
+        }
         log.info("用户{} 连接到 {}", userInfo.getUserId(), host);
         return Result.createSuccessResult(host);
     }

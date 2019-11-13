@@ -18,6 +18,11 @@ public class ConsistentHash {
     private static final Logger log = LoggerFactory.getLogger(ConsistentHash.class);
 
     /**
+     * 是否在更新hash环
+     */
+    private static boolean isSync = false;
+
+    /**
      * 虚拟节点,key表示的是hash值，value表示的是虚拟节点
      */
     private static SortedMap<Integer, String> nodes;
@@ -41,31 +46,16 @@ public class ConsistentHash {
     }
 
     /**
-     * 删除websocket服务器
-     */
-    private synchronized static void deleteServer(String host){
-        //删除虚拟节点
-        for(int i = 0; i < VIRTUAL_NODES; i++){
-            String virtualNode = constructVirtualNode(host, i);
-            int hash = getHash(virtualNode);
-            nodes.remove(hash);
-        }
-        log.info("删除节点{}", host);
-    }
-
-    /**
      * 顺时针获取node节点对应的第一个虚拟节点
      */
-    public static String getServer(String node){
+    public static String getServer(String node) throws InterruptedException {
+        if(isSync){
+            Thread.sleep(100);
+        }
         if(node == null){
             return null;
         }
-
         log.info("hash环大小: {}", nodes.size());
-        for(Map.Entry<Integer, String> no : nodes.entrySet()){
-            log.info("key: {}, value: {}", no.getKey(), no.getValue());
-        }
-
         int hash = getHash(node);
         SortedMap<Integer, String> tailNodes = nodes.tailMap(hash);
         //获取到的tailNodes可能为空
@@ -103,11 +93,13 @@ public class ConsistentHash {
      * 变动节点，生成新的hash环
      */
     public synchronized static void nodeChange(List<String> nodeList){
+        isSync = true;
         SortedMap<Integer, String> map = new TreeMap<>();
         for(String server : nodeList){
             addServer(map, server);
         }
         //更新节点树
         nodes = map;
+        isSync = false;
     }
 }

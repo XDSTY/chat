@@ -1,6 +1,7 @@
 package com.xdsty.chatserver.webscoket.handler;
 
 import com.xdsty.chatserver.attribute.Attributes;
+import com.xdsty.chatserver.util.HttpStatus;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.*;
@@ -14,14 +15,12 @@ import io.netty.handler.codec.http.websocketx.WebSocketServerHandshakerFactory;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
 import static io.netty.handler.codec.http.HttpUtil.isKeepAlive;
 
 /**
  * description
- *
  * @author 张富华 (fuhua.zhang@ucarinc.com)
  * @version 1.0
  * @date 2019/11/4 17:19
@@ -43,7 +42,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<Object> {
             log.info("收到http请求");
             handlerHttpRequest(ctx, (FullHttpRequest) msg);
         }else{
-            //交给下一个处理器处理
+            //交给下一个处理器处理 SimpleChannelInBoundHandler会自动的清除消息 所以需要手动的retain
             ctx.fireChannelRead(((WebSocketFrame)msg).retain());
         }
     }
@@ -76,7 +75,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<Object> {
     private static void sendHttpResponse(ChannelHandlerContext ctx,
                                          FullHttpRequest req, DefaultFullHttpResponse res) {
         // 返回应答给客户端
-        if (res.status().code() != HttpStatus.OK.value()) {
+        if (res.status().code() != HttpStatus.OK) {
             ByteBuf buf = Unpooled.copiedBuffer(res.status().toString(),
                     CharsetUtil.UTF_8);
             res.content().writeBytes(buf);
@@ -84,7 +83,7 @@ public class HttpRequestHandler extends SimpleChannelInboundHandler<Object> {
         }
         ChannelFuture f = ctx.channel().writeAndFlush(res);
         // 如果是非Keep-Alive，关闭连接
-        if (!isKeepAlive(req) || res.status().code() != HttpStatus.OK.value()) {
+        if (!isKeepAlive(req) || res.status().code() != HttpStatus.OK) {
             f.addListener(ChannelFutureListener.CLOSE);
         }
     }

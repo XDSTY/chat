@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * description 处理点对点通信
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/5 10:18
  */
@@ -81,6 +81,8 @@ public class SendSingleChat extends AbstractChatStrategy {
 
     @PostConstruct
     public void register(){
+        //处理点对点图片消息 和 点对点图片消息
         ChatStrategyFactory.register(MsgType.SINGLE_MSG, this);
+        ChatStrategyFactory.register(MsgType.SINGLE_IMG, this);
     }
 }

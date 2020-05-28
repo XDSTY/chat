@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/6 14:30
  */
@@ -49,10 +49,10 @@ public class ConsistentHash {
      * 顺时针获取node节点对应的第一个虚拟节点
      */
     public static String getServer(String node) throws InterruptedException {
-        if(isSync){
+        while (isSync){
             Thread.sleep(100);
         }
-        if(node == null){
+        if(node == null || nodes.size() == 0){
             return null;
         }
         log.info("hash环大小: {}", nodes.size());

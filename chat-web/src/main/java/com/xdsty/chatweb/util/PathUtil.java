@@ -1,11 +1,11 @@
-package com.xdsty.fileupload.util;
+package com.xdsty.chatweb.util;
 
 import java.io.File;
 import java.util.UUID;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/13 16:32
  */

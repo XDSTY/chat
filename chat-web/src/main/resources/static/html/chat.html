@@ -21,8 +21,8 @@
     </div>
     <div class="context">
         <!-- 左侧聊天卡片 -->
-        <div class="conLeft">
-            <ul>
+      <div class="conLeft">
+           <ul>
 
             </ul>
         </div>
@@ -64,6 +64,7 @@
                         <li><img src="../img/emoji/emoji_22.png"></li>
                         <li><img src="../img/emoji/emoji_23.png"></li>
                         <li><img src="../img/emoji/emoji_24.png"></li>
+                        <li><img src="http://129.204.192.197/photo/4/10/8e3109e9-cff5-4433-afe2-ceb6b2b915e8.jpg"></li>
                     </ul>
                 </div>
                 <div class="footTop">
@@ -73,7 +74,7 @@
                         </li>
                         <li class="file-upload">
                             <a data-toggle="modal" data-target="#upload-modal" data-backdrop="static">
-                          <!--      <img  src="../img/upload.jpg"> -->
+                                <img  src="../img/upload.jpg">
                             </a>
                         </li>
                     </ul>
@@ -93,16 +94,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button class="close" data-dismiss="modal">&times;</button>
-                    <h3 class="modal-title text-primary">文件上传</h3>
+                    <h3 class="modal-title text-primary"></h3>
                 </div>
                 <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-3 control-label">选择文件</label>
+                        <label class="col-sm-3 control-label">选择图片</label>
                         <div class="col-sm-9">
                             <input type="file" name="file"
                                 class="col-sm-9 myfile" />
-                            <p class="help-block">注意：文件大小不超过30M，有效期为7天</p>
+                            <p class="help-block">注意：图片大小不超过3M</p>
                         </div>
                     </div>
                 </form>
@@ -163,6 +164,8 @@
             if(res.code === 0){
                 socketHost = res.data;
                 connect();
+            }else{
+                alert('连接到websocket服务器失败');
             }
         });
     }
@@ -185,6 +188,9 @@
                             break;
                         case "SINGLE_SENDING":
                             ws.singleReceive(json);
+                            break;
+                        case "SINGLE_IMG":
+                            ws.singleImgReceive(json);
                             break;
                         case "GROUP_SENDING":
                             ws.groupReceive(json.data);

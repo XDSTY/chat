@@ -16,7 +16,7 @@ import java.util.List;
 
 /**
  * description 用于获取一致性hash算法的服务节点
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/6 10:05
  */

@@ -15,7 +15,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * description 处理websockt握手完成后
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/5 17:29
  */

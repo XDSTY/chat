@@ -13,7 +13,7 @@ import javax.annotation.PostConstruct;
 
 /**
  * description 心跳包处理
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/8 14:31
  */

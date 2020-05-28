@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/5 16:39
  */
@@ -51,7 +51,10 @@ public class UserInfoController {
             return Result.createByFailure();
         }
         log.info("用户{} 连接到 {}", userInfo.getUserId(), host);
-        return Result.createSuccessResult(host);
+        if(host != null){
+            return Result.createSuccessResult(host);
+        }
+        return Result.createByFailure();
     }
 
 }

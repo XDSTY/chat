@@ -9,18 +9,24 @@
 <body>
 
 <div class="login-main">
-    <header class="layui-elip">登录</header>
+    <header class="layui-elip">米奇妙妙屋</header>
     <form class="layui-form">
+        <fieldset class="layui-elem-field">
+          <legend>提示</legend>
+          <div class="layui-field-box">
+            头像会随机选择
+          </div>
+        </fieldset>
         <div class="layui-input-inline">
             <input type="text" name="username" id="username" required lay-verify="required" placeholder="用户名" autocomplete="off"
                    class="layui-input">
         </div>
-        <div class="layui-input-inline">
+     <!--   <div class="layui-input-inline">
             <input type="password" name="password" id="password" required lay-verify="required" placeholder="密码" autocomplete="off"
                    class="layui-input">
-        </div>
+        </div> -->
         <div class="layui-input-inline login-btn">
-            <input lay-submit lay-filter="login" class="layui-btn" value="登录" >
+            <input lay-submit lay-filter="login" class="layui-btn" value="确认" >
         </div>
         <hr/>
     </form>
@@ -35,7 +41,6 @@
         form.on('submit(login)',function (obj) {
             var data = {};
             data.username = $("#username").val();
-            data.password = $("#password").val();
             function fun(){
                 window.location.href = 'chat.html';
             }

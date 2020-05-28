@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/6 10:35
  */
@@ -22,9 +22,12 @@ public class ZkUtil {
         zkServer = zkUrl;
     }
 
+    @Value("${zk.timeout}")
+    private int timeout;
+
     public ZkClient getZkClient(){
         if(zkClient == null){
-            zkClient = new ZkClient(zkServer, 6000);
+            zkClient = new ZkClient(zkServer, timeout);
         }
         return zkClient;
     }

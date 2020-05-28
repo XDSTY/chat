@@ -1,10 +1,9 @@
 package com.xdsty.chatweb.model.vo;
 
-import java.util.List;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/5 16:14
  */
@@ -15,8 +14,6 @@ public class GroupInfo {
     private String groupName;
 
     private String groupImg;
-
-    private List<UserInfo> members;
 
     public GroupInfo(String groupId, String groupName, String groupImg) {
         this.groupId = groupId;
@@ -48,11 +45,4 @@ public class GroupInfo {
         this.groupImg = groupImg;
     }
 
-    public List<UserInfo> getMembers() {
-        return members;
-    }
-
-    public void setMembers(List<UserInfo> members) {
-        this.members = members;
-    }
 }

@@ -1,6 +1,11 @@
 server:
-    port: 8081
+    port: 8080
 
 zk:
     server: 119.23.240.184:2181
     root: /mkroot
+
+file:
+  path： /root/static/photo/
+img:
+  prefix: 129.204.192.197/photo/

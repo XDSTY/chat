@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 /**
  * description
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/4 10:21
  */
@@ -26,8 +26,8 @@ public class LoginController {
     private UserService userService;
 
     @PostMapping("login")
-    public Result login(@RequestBody LoginUser user, HttpServletRequest request){
-        return userService.checkLogin(user, request.getSession());
+    public Result register(@RequestBody LoginUser user, HttpServletRequest request){
+        return userService.register(user, request.getSession());
     }
 
 }

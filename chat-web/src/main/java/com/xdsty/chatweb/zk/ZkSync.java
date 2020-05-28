@@ -1,7 +1,6 @@
 package com.xdsty.chatweb.zk;
 
 import com.xdsty.chatweb.disaptch.ConsistentHash;
-import com.xdsty.chatweb.util.ServerCache;
 import org.I0Itec.zkclient.IZkChildListener;
 import org.I0Itec.zkclient.ZkClient;
 import org.slf4j.Logger;
@@ -15,7 +14,7 @@ import java.util.List;
 
 /**
  * description 监听zk里的socket server
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/6 17:10
  */

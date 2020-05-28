@@ -5,6 +5,7 @@ import com.xdsty.chatserver.util.JsonUtil;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ import java.util.Properties;
 /**
  * description
  *
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/7 10:37
  */
@@ -45,7 +46,11 @@ public class MsgProducer {
             return;
         }
         ProducerRecord<String,String> record = new ProducerRecord<>(topic,"1", JsonUtil.convertToJson(msg));
-        producer.send(record);
+        producer.send(record, (RecordMetadata data, Exception e) -> {
+            if(e != null){
+                log.error("消息发送失败, {}", e);
+            }
+        });
     }
 
     @PreDestroy

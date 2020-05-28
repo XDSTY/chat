@@ -10,13 +10,13 @@ import javax.servlet.http.HttpSession;
 /**
  * description
  *
- * @author 张富华 (fuhua.zhang@ucarinc.com)
+ * @author 张富华
  * @version 1.0
  * @date 2019/11/5 16:40
  */
 public interface UserService {
 
-    Result checkLogin(LoginUser user, HttpSession session);
+    Result register(LoginUser user, HttpSession session);
 
     Result<UserInfo> getUserInfo(HttpSession session);
 

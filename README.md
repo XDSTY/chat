@@ -1,2 +1,2 @@
 # chat
-是一个简单的分布式在线聊天系统
+基于Springboot+netty+websocket实现的简单的分布式实时聊天系统，使用一致性hash算法记录用户和节点的关系，使用kafka在不同节点传递消息
